@@ -5,7 +5,7 @@ DROP TABLE IF EXISTS sharing;
 CREATE TABLE user (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL,
-  public_key TEXT NOT NULL,
+  public_key TEXT UNIQUE NOT NULL,
   api_token TEXT,
   verify_token TEXT
 );

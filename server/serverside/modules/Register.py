@@ -18,7 +18,7 @@ success = {
 }, 200
 
 class Register(Resource):
-    def valid_register_data(self):
+    def get_register_data(self):
         name = request.args.get('name')
         public_key = request.args.get('public_key')
 
@@ -30,7 +30,7 @@ class Register(Resource):
 
     def post(self):
         try:
-            name, public_key = self.valid_register_data()
+            name, public_key = self.get_register_data()
 
         except Exception as e:
             print(e)

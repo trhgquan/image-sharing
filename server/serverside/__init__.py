@@ -7,6 +7,7 @@ from . import db
 # Modules
 from .modules.PingPong import PingPong
 from .modules.Register import Register
+from .modules.Login import Login
 
 def create_app(test_config=None):
     # create and configure the app
@@ -36,5 +37,6 @@ def create_app(test_config=None):
     api = Api(app)
     api.add_resource(PingPong, '/ping')
     api.add_resource(Register, '/register')
+    api.add_resource(Login, '/login')
 
     return app
