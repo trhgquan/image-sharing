@@ -17,6 +17,12 @@ class ImageModel:
 
     def save_img_dir(self, img):
         new_name, new_img_id = self.create_absolute_image_name(img)
+
+        if not os.path.isdir(os.path.join(current_app.root_path, current_app.config['UPLOAD_FOLDER'])):
+            os.mkdir(
+                os.path.join(current_app.root_path, current_app.config['UPLOAD_FOLDER'])
+            )
+
         new_path = os.path.join(current_app.root_path, current_app.config['UPLOAD_FOLDER'], new_name)
 
         img.save(new_path)
