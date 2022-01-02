@@ -1,4 +1,8 @@
+Full documentation can be found [here](https://documenter.getpostman.com/view/18981203/UVRHiiVn)
+
 # Server-side installation
+
+
 ## Environment
 1. Create venv:
 ```
