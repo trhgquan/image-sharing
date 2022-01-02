@@ -38,19 +38,10 @@ class UserAuthentication:
 
         row = db_exec.fetchone()
         
-        print(verify_token, row[0])
-
         return verify_token == row[0]
 
     def loginable(self, user_id):
-        db_exec = self.__db.execute(
-           'SELECT verify_token FROM user WHERE (id = ?)',
-           (user_id)
-        )
-
-        row = db_exec.fetchone()
-
-        return row[0] == None and self.check_user_exist(user_id)
+        return self.check_user_exist(user_id)
 
     def login_pending(self, user_id, verify_token):
         self.__db.execute(

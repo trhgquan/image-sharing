@@ -1,7 +1,7 @@
 from flask import request
 from flask_restful import Resource
-# from .db import get_db
-from .Authentication import UserAuthentication
+
+from .Models.Authentication import UserAuthentication
 
 data_error = {
     'error' : True,
