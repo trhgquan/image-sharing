@@ -1,16 +1,11 @@
 from flask import request
 from flask_restful import Resource
 
-from .Models.Authentication import UserAuthentication
-
-data_error = {
-    'error' : True,
-    'message' : 'invalid credentials, try again'
-}, 500
+from .Models.User import UserModel
 
 class Login(Resource):
     def __init__(self):
-        self.__UA = UserAuthentication()
+        self.__UA = UserModel()
 
     def get_login_id(self):
         user_id = request.args.get('id')
@@ -56,7 +51,10 @@ class Login(Resource):
 
         except Exception as e:
             print(e)
-            return data_error
+            return {
+                'error' : True,
+                'message' : str(e)
+            }, 500
 
         api_token = self.__UA.login_accepted(user_id)
 

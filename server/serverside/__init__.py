@@ -9,6 +9,7 @@ from .modules.PingPong import PingPong
 from .modules.Register import Register
 from .modules.Login import Login
 from .modules.UploadImages import UploadImages
+from .modules.DownloadImages import DownloadImages
 
 def create_app(test_config = None):
     # create and configure the app
@@ -41,5 +42,6 @@ def create_app(test_config = None):
     api.add_resource(Register, '/register')
     api.add_resource(Login, '/login')
     api.add_resource(UploadImages, '/upload')
+    api.add_resource(DownloadImages, '/download')
 
     return app

@@ -1,13 +1,16 @@
 from flask import request
 from flask_restful import Resource, reqparse
 
-from .Models.Authentication import UserAuthentication
+from .Models.User import UserModel
 from .Models.Image import ImageModel
+
+import os
 
 class UploadImages(Resource):
     def __init__(self):
-        self.__UA = UserAuthentication()
+        self.__UA = UserModel()
         self.__im = ImageModel()
+        self.ALLOWED_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.bmp', '.gif']
 
     def get_api_token(self):
         api_token = request.args.get('api_token')
@@ -40,7 +43,13 @@ class UploadImages(Resource):
         except Exception:
             raise Exception('No image selected')
         else:
-            return image_file
+            _, extension = os.path.splitext(image_file.filename.lower())
+
+            if extension not in self.ALLOWED_EXTENSIONS:
+                raise Exception('Extension not allowed')
+
+            else:
+                return image_file
 
     def post(self):
         try:
@@ -63,7 +72,7 @@ class UploadImages(Resource):
             print(e)
             return {
                 'error' : True,
-                'message' : 'missing credentials'
+                'message' : str(e)
             }, 500
         else:
             return {

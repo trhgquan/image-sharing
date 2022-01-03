@@ -1,6 +1,6 @@
 from flask import request
-from serverside.db import get_db
 from flask_restful import Resource
+from .Models.User import UserModel
 
 data_error = {
     'error' : True,
@@ -18,6 +18,9 @@ success = {
 }, 200
 
 class Register(Resource):
+    def __init__(self):
+        self.__UA = UserModel()
+
     def get_register_data(self):
         name = request.args.get('name')
         public_key = request.args.get('public_key')
@@ -36,15 +39,10 @@ class Register(Resource):
             print(e)
             return data_error
 
-        db = get_db()
-        
         try:
-            db.execute(
-                "INSERT INTO user (name, public_key) VALUES (?, ?)",
-                (name, public_key)
-            )
-            db.commit()
-        except db.IntegrityError:
+            self.__UA.create_user(name, public_key)
+        except Exception as e:
+            print(e)
             return public_key_error
         else: 
             return success

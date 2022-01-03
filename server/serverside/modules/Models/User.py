@@ -1,7 +1,7 @@
 from serverside.db import get_db
 import secrets
 
-class UserAuthentication:
+class UserModel:
     def __init__(self, token_length = 16):
         self.__db = get_db()
         self.__token_length = token_length
@@ -28,7 +28,6 @@ class UserAuthentication:
         row = db_exec.fetchone()
         
         return not (row == None)
-
 
     def check_verify_token(self, user_id, verify_token):
         db_exec = self.__db.execute(
@@ -62,3 +61,11 @@ class UserAuthentication:
         self.__db.commit()
 
         return api_token
+    
+    def create_user(self, name, public_key):
+        self.__db.execute(
+            'INSERT INTO user (name, public_key) VALUES (?, ?)',
+            (name, public_key)
+        )
+
+        self.__db.commit()
