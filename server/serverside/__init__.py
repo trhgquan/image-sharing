@@ -46,12 +46,18 @@ def create_app(test_config = None):
         DownloadImages,
         '/viewall',
         endpoint = 'viewall',
-        methods = ['GET']
+        methods = ['POST']
     )
     api.add_resource(
         DownloadImages, 
         '/passphrase',
         endpoint = 'passphrase',
-        methods = ['GET']
+        methods = ['POST']
+    )
+    api.add_resource(
+        DownloadImages,
+        '/download',
+        endpoint = 'download',
+        methods = ['POST']
     )
     return app

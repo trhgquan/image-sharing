@@ -77,7 +77,7 @@ class UploadImages(Resource):
         else:
             return {
                 'error' : False,
-                'image_path' : new_path,
+                'image_filename' : new_path,
                 'image_id' : new_img_id,
                 'message' : 'upload successful'
             }, 200

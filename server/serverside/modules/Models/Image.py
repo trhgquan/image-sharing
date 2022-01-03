@@ -27,7 +27,7 @@ class ImageModel:
 
         img.save(new_path)
 
-        return new_path, new_img_id
+        return new_name, new_img_id
 
     def save_img_record(self, user_id, img_id, passphrase, location):
         # Add records to image database
@@ -79,4 +79,13 @@ class ImageModel:
         row = db_exec.fetchone()
 
         return row[0] != 0
+    
+    def get_img_filename(self, user_id, img_id):
+        db_exec = self.__db.execute(
+            'SELECT images.location FROM images, sharing WHERE sharing.user_id = ? AND sharing.image_id = ? AND sharing.image_id = images.id',
+            (user_id, img_id)
+        )
 
+        row = db_exec.fetchone()
+
+        return row[0]
