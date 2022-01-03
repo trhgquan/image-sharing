@@ -59,3 +59,24 @@ class ImageModel:
         rows = db_exec.fetchall()
 
         return rows
+
+    def get_img_passphrase(self, user_id, img_id):
+        db_exec = self.__db.execute(
+            'SELECT passphrase FROM sharing WHERE user_id = ? AND image_id = ?',
+            (user_id, img_id)
+        )
+
+        row = db_exec.fetchone()
+
+        return row[0]
+
+    def check_img_exist(self, user_id, img_id):
+        db_exec = self.__db.execute(
+            'SELECT COUNT(*) FROM sharing WHERE user_id = ? AND image_id = ?',
+            (user_id, img_id)
+        )
+
+        row = db_exec.fetchone()
+
+        return row[0] != 0
+

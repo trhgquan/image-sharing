@@ -42,6 +42,16 @@ def create_app(test_config = None):
     api.add_resource(Register, '/register')
     api.add_resource(Login, '/login')
     api.add_resource(UploadImages, '/upload')
-    api.add_resource(DownloadImages, '/download')
-
+    api.add_resource(
+        DownloadImages,
+        '/viewall',
+        endpoint = 'viewall',
+        methods = ['GET']
+    )
+    api.add_resource(
+        DownloadImages, 
+        '/passphrase',
+        endpoint = 'passphrase',
+        methods = ['GET']
+    )
     return app

@@ -20,14 +20,29 @@ class DownloadImages(Resource):
             return api_token
 
     def get_user_id(self):
-        user_id = request.args.get('id')
+        user_id = request.args.get('user_id')
 
         if user_id == None:
             raise Exception('Missing user_id')
         else:
             return user_id
 
+    def get_image_id(self):
+        image_id = request.args.get('img_id')
+
+        if image_id == None:
+            raise Exception('Missing img_id')
+        else:
+            return image_id
+
     def get(self):
+        if request.endpoint == 'viewall':
+            return self.user_images()
+        if request.endpoint == 'passphrase':
+            return self.image_passphrase()
+        return None, 204
+
+    def user_images(self):
         try:
             user_id = self.get_user_id()
             api_token = self.get_api_token()
@@ -52,3 +67,30 @@ class DownloadImages(Resource):
                 'img_list' : img_list,
                 'message' : 'request successful'
             }, 200
+
+    def image_passphrase(self):
+        try:
+            img_id = self.get_image_id()
+            user_id = self.get_user_id()
+            api_token = self.get_api_token()
+
+            if not self.__UA.check_api_token(user_id, api_token):
+                raise Exception('Permission denied: either user_id or api_token is wrong')
+
+            elif not self.__im.check_img_exist(user_id, img_id):
+                raise Exception('Image not found')
+            
+            else:
+                passphrase = self.__im.get_img_passphrase(user_id, img_id)
+
+                return {
+                    'error' : False,
+                    'passphrase' : passphrase
+                }, 200
+
+        except Exception as e:
+            print(e)
+            return {
+                'error' : True,
+                'message' : str(e)
+            }
