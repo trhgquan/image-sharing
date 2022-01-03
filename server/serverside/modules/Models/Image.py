@@ -36,6 +36,11 @@ class ImageModel:
             (img_id, user_id, location)
         )
 
+        self.__db.commit()
+
+        self.share_img_to_user(img_id, user_id, passphrase)
+
+    def share_img_to_user(self, img_id, user_id, passphrase):
         self.__db.execute(
             'INSERT INTO sharing (image_id, user_id, passphrase) VALUES (?, ?, ?)',
             (img_id, user_id, passphrase)
@@ -89,3 +94,12 @@ class ImageModel:
         row = db_exec.fetchone()
 
         return row[0]
+    
+    def is_author(self, user_id, img_id):
+        db_exec = self.__db.execute(
+            'SELECT COUNT(*) FROM images, user WHERE user.id = ? AND images.id = ? AND user.id = images.author',
+            (user_id, img_id)
+        )
+
+        row = db_exec.fetchone()
+        return row[0] == 1

@@ -82,3 +82,13 @@ class UserModel:
         self.__db.commit()
 
         return new_id
+    
+    def get_user_public_key(self, user_id):
+        db_exec = self.__db.execute(
+            'SELECT public_key FROM user WHERE id = ?',
+            (user_id)
+        )
+
+        row = db_exec.fetchone()
+
+        return row[0]

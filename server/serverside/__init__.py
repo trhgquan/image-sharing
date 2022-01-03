@@ -10,6 +10,7 @@ from .modules.Register import Register
 from .modules.Login import Login
 from .modules.UploadImages import UploadImages
 from .modules.DownloadImages import DownloadImages
+from .modules.Sharing import Sharing
 
 def create_app(test_config = None):
     # create and configure the app
@@ -60,4 +61,17 @@ def create_app(test_config = None):
         endpoint = 'download',
         methods = ['POST']
     )
+    api.add_resouce(
+        Sharing,
+        '/publickey',
+        endpoint = 'publickey',
+        methods = ['POST']
+    )
+    api.add_resource(
+        Sharing,
+        '/shareimage',
+        endpoint = 'shareimage',
+        methods = ['POST']
+    )
+
     return app
