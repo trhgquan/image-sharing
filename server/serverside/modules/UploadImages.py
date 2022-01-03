@@ -73,7 +73,7 @@ class UploadImages(Resource):
             return {
                 'error' : True,
                 'message' : str(e)
-            }, 500
+            }, 400
         else:
             return {
                 'error' : False,

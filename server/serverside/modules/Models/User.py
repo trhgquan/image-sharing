@@ -9,6 +9,15 @@ class UserModel:
     def generate_token(self):
         return secrets.token_hex(self.__token_length)
 
+    def get_total_users(self):
+        db_exec = self.__db.execute(
+            'SELECT COUNT(*) FROM user WHERE 1', ()
+        )
+
+        row = db_exec.fetchone()
+
+        return row[0]
+
     def check_user_exist(self, user_id):
         db_exec = self.__db.execute(
             'SELECT COUNT(*) FROM user WHERE (id = ?)',
@@ -63,9 +72,13 @@ class UserModel:
         return api_token
     
     def create_user(self, name, public_key):
+        new_id = self.get_total_users() + 1
+
         self.__db.execute(
-            'INSERT INTO user (name, public_key) VALUES (?, ?)',
-            (name, public_key)
+            'INSERT INTO user (id, name, public_key) VALUES (?, ?, ?)',
+            (new_id, name, public_key)
         )
 
         self.__db.commit()
+
+        return new_id

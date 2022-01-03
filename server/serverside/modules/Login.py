@@ -54,7 +54,7 @@ class Login(Resource):
             return {
                 'error' : True,
                 'message' : str(e)
-            }, 500
+            }, 400
 
         api_token = self.__UA.login_accepted(user_id)
 
