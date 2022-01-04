@@ -97,9 +97,10 @@ class ImageModel:
     
     def is_author(self, user_id, img_id):
         db_exec = self.__db.execute(
-            'SELECT COUNT(*) FROM images, user WHERE user.id = ? AND images.id = ? AND user.id = images.author',
-            (user_id, img_id)
+            'SELECT COUNT(*) FROM images WHERE id = ? AND author_id = ?',
+            (img_id, user_id)
         )
 
         row = db_exec.fetchone()
+        
         return row[0] == 1

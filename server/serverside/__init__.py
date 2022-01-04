@@ -69,8 +69,8 @@ def create_app(test_config = None):
     )
     api.add_resource(
         Sharing,
-        '/shareimage',
-        endpoint = 'shareimage',
+        '/share',
+        endpoint = 'share',
         methods = ['POST']
     )
 
