@@ -61,7 +61,7 @@ def create_app(test_config = None):
         endpoint = 'download',
         methods = ['POST']
     )
-    api.add_resouce(
+    api.add_resource(
         Sharing,
         '/publickey',
         endpoint = 'publickey',

@@ -21,7 +21,7 @@ class UserModel:
     def check_user_exist(self, user_id):
         db_exec = self.__db.execute(
             'SELECT COUNT(*) FROM user WHERE (id = ?)',
-            (user_id)
+            (user_id,)
         )
 
         row = db_exec.fetchone()
@@ -41,12 +41,12 @@ class UserModel:
     def check_verify_token(self, user_id, verify_token):
         db_exec = self.__db.execute(
             'SELECT verify_token FROM user WHERE (id = ?)',
-            (user_id)
+            (user_id,)
         )
 
         row = db_exec.fetchone()
         
-        return verify_token == row[0]
+        return row != None and verify_token == row[0]
 
     def loginable(self, user_id):
         return self.check_user_exist(user_id)
@@ -86,7 +86,7 @@ class UserModel:
     def get_user_public_key(self, user_id):
         db_exec = self.__db.execute(
             'SELECT public_key FROM user WHERE id = ?',
-            (user_id)
+            (user_id,)
         )
 
         row = db_exec.fetchone()

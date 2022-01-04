@@ -4,6 +4,7 @@ from flask_restful import Resource, reqparse
 from .Models.User import UserModel
 from .Models.Image import ImageModel
 
+from .Utils import Utils
 import os
 
 class UploadImages(Resource):
@@ -11,30 +12,6 @@ class UploadImages(Resource):
         self.__UA = UserModel()
         self.__im = ImageModel()
         self.ALLOWED_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.bmp', '.gif']
-
-    def get_api_token(self):
-        api_token = request.args.get('api_token')
-
-        if api_token == None:
-            raise Exception('Missing api_token')
-        else:
-            return api_token
-
-    def get_user_id(self):
-        user_id = request.args.get('id')
-
-        if user_id == None:
-            raise Exception('Missing user_id')
-        else:
-            return user_id
-    
-    def get_passphrase(self):
-        passphrase = request.args.get('passphrase')
-
-        if passphrase == None:
-            raise Exception('Missing passphrase')
-        else:
-            return passphrase
 
     def get_image(self):
         try:
@@ -53,10 +30,10 @@ class UploadImages(Resource):
 
     def post(self):
         try:
-            user_id = self.get_user_id()
-            api_token = self.get_api_token()
-            passphrase = self.get_passphrase()
-            
+            user_id = Utils.get_input('user_id')
+            api_token = Utils.get_input('api_token')
+            passphrase = Utils.get_input('passphrase')
+
             image = self.get_image()
            
             if not self.__UA.check_api_token(user_id, api_token):

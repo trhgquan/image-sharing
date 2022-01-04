@@ -58,7 +58,7 @@ class ImageModel:
     def get_images_of_user(self, user_id):
         db_exec = self.__db.execute(
             'SELECT images.id, images.location FROM images, sharing WHERE images.id = sharing.image_id AND sharing.user_id = ?',
-            (user_id)
+            (user_id,)
         )
 
         rows = db_exec.fetchall()
