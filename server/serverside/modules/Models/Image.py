@@ -27,7 +27,7 @@ class ImageModel:
 
         img.save(new_path)
 
-        return new_path, new_img_id
+        return new_name, new_img_id
 
     def save_img_record(self, user_id, img_id, passphrase, location):
         # Add records to image database
@@ -36,6 +36,11 @@ class ImageModel:
             (img_id, user_id, location)
         )
 
+        self.__db.commit()
+
+        self.share_img_to_user(img_id, user_id, passphrase)
+
+    def share_img_to_user(self, img_id, user_id, passphrase):
         self.__db.execute(
             'INSERT INTO sharing (image_id, user_id, passphrase) VALUES (?, ?, ?)',
             (img_id, user_id, passphrase)
@@ -49,3 +54,53 @@ class ImageModel:
         
         row = db_exec.fetchone()
         return row[0]
+    
+    def get_images_of_user(self, user_id):
+        db_exec = self.__db.execute(
+            'SELECT images.id, images.location FROM images, sharing WHERE images.id = sharing.image_id AND sharing.user_id = ?',
+            (user_id,)
+        )
+
+        rows = db_exec.fetchall()
+
+        return rows
+
+    def get_img_passphrase(self, user_id, img_id):
+        db_exec = self.__db.execute(
+            'SELECT passphrase FROM sharing WHERE user_id = ? AND image_id = ?',
+            (user_id, img_id)
+        )
+
+        row = db_exec.fetchone()
+
+        return row[0]
+
+    def check_img_exist(self, user_id, img_id):
+        db_exec = self.__db.execute(
+            'SELECT COUNT(*) FROM sharing WHERE user_id = ? AND image_id = ?',
+            (user_id, img_id)
+        )
+
+        row = db_exec.fetchone()
+
+        return row[0] != 0
+    
+    def get_img_filename(self, user_id, img_id):
+        db_exec = self.__db.execute(
+            'SELECT images.location FROM images, sharing WHERE sharing.user_id = ? AND sharing.image_id = ? AND sharing.image_id = images.id',
+            (user_id, img_id)
+        )
+
+        row = db_exec.fetchone()
+
+        return row[0]
+    
+    def is_author(self, user_id, img_id):
+        db_exec = self.__db.execute(
+            'SELECT COUNT(*) FROM images WHERE id = ? AND author_id = ?',
+            (img_id, user_id)
+        )
+
+        row = db_exec.fetchone()
+        
+        return row[0] == 1

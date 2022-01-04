@@ -9,6 +9,8 @@ from .modules.PingPong import PingPong
 from .modules.Register import Register
 from .modules.Login import Login
 from .modules.UploadImages import UploadImages
+from .modules.DownloadImages import DownloadImages
+from .modules.Sharing import Sharing
 
 def create_app(test_config = None):
     # create and configure the app
@@ -41,5 +43,35 @@ def create_app(test_config = None):
     api.add_resource(Register, '/register')
     api.add_resource(Login, '/login')
     api.add_resource(UploadImages, '/upload')
+    api.add_resource(
+        DownloadImages,
+        '/viewall',
+        endpoint = 'viewall',
+        methods = ['POST']
+    )
+    api.add_resource(
+        DownloadImages, 
+        '/passphrase',
+        endpoint = 'passphrase',
+        methods = ['POST']
+    )
+    api.add_resource(
+        DownloadImages,
+        '/download',
+        endpoint = 'download',
+        methods = ['POST']
+    )
+    api.add_resource(
+        Sharing,
+        '/publickey',
+        endpoint = 'publickey',
+        methods = ['POST']
+    )
+    api.add_resource(
+        Sharing,
+        '/share',
+        endpoint = 'share',
+        methods = ['POST']
+    )
 
     return app

@@ -1,7 +1,7 @@
 from serverside.db import get_db
 import secrets
 
-class UserAuthentication:
+class UserModel:
     def __init__(self, token_length = 16):
         self.__db = get_db()
         self.__token_length = token_length
@@ -9,10 +9,19 @@ class UserAuthentication:
     def generate_token(self):
         return secrets.token_hex(self.__token_length)
 
+    def get_total_users(self):
+        db_exec = self.__db.execute(
+            'SELECT COUNT(*) FROM user WHERE 1', ()
+        )
+
+        row = db_exec.fetchone()
+
+        return row[0]
+
     def check_user_exist(self, user_id):
         db_exec = self.__db.execute(
             'SELECT COUNT(*) FROM user WHERE (id = ?)',
-            (user_id)
+            (user_id,)
         )
 
         row = db_exec.fetchone()
@@ -29,16 +38,15 @@ class UserAuthentication:
         
         return not (row == None)
 
-
     def check_verify_token(self, user_id, verify_token):
         db_exec = self.__db.execute(
             'SELECT verify_token FROM user WHERE (id = ?)',
-            (user_id)
+            (user_id,)
         )
 
         row = db_exec.fetchone()
         
-        return verify_token == row[0]
+        return row != None and verify_token == row[0]
 
     def loginable(self, user_id):
         return self.check_user_exist(user_id)
@@ -62,3 +70,25 @@ class UserAuthentication:
         self.__db.commit()
 
         return api_token
+    
+    def create_user(self, name, public_key):
+        new_id = self.get_total_users() + 1
+
+        self.__db.execute(
+            'INSERT INTO user (id, name, public_key) VALUES (?, ?, ?)',
+            (new_id, name, public_key)
+        )
+
+        self.__db.commit()
+
+        return new_id
+    
+    def get_user_public_key(self, user_id):
+        db_exec = self.__db.execute(
+            'SELECT public_key FROM user WHERE id = ?',
+            (user_id,)
+        )
+
+        row = db_exec.fetchone()
+
+        return row[0]
