@@ -1,4 +1,3 @@
-from flask import request
 from flask_restful import Resource
 
 from .Models.User import UserModel
@@ -19,7 +18,7 @@ class Login(Resource):
             print(e)
             return {
                 'error' : True,
-                'messages' : str(e)
+                'message' : str(e)
             }
         
         verify_token = self.__UA.generate_token()

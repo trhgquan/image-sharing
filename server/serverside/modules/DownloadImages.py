@@ -101,5 +101,5 @@ class DownloadImages(Resource):
             print(e)
             return {
                 'error' : True,
-                'messages' : str(e)
+                'message' : str(e)
             }, 400

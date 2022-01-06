@@ -8,6 +8,7 @@ from . import db
 from .modules.PingPong import PingPong
 from .modules.Register import Register
 from .modules.Login import Login
+from .modules.Logout import Logout
 from .modules.UploadImages import UploadImages
 from .modules.DownloadImages import DownloadImages
 from .modules.Sharing import Sharing
@@ -42,6 +43,7 @@ def create_app(test_config = None):
     api.add_resource(PingPong, '/ping')
     api.add_resource(Register, '/register')
     api.add_resource(Login, '/login')
+    api.add_resource(Logout, '/logout')
     api.add_resource(UploadImages, '/upload')
     api.add_resource(
         DownloadImages,
