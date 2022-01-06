@@ -41,7 +41,7 @@ class Sharing(Resource):
             print(e)
             return {
                 'error' : True,
-                'messages' : str(e)
+                'message' : str(e)
             }, 400
 
     def share_image_to_user(self):
@@ -79,5 +79,5 @@ class Sharing(Resource):
             print(e)
             return {
                 'error' : True,
-                'messages' : str(e)
+                'message' : str(e)
             }, 400

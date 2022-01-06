@@ -17,6 +17,16 @@ class UserModel:
         row = db_exec.fetchone()
 
         return row[0]
+    
+    def get_user_public_key(self, user_id):
+        db_exec = self.__db.execute(
+            'SELECT public_key FROM user WHERE id = ?',
+            (user_id,)
+        )
+
+        row = db_exec.fetchone()
+
+        return row[0]
 
     def check_user_exist(self, user_id):
         db_exec = self.__db.execute(
@@ -70,7 +80,15 @@ class UserModel:
         self.__db.commit()
 
         return api_token
-    
+   
+    def logout(self, user_id):
+        self.__db.execute(
+            'UPDATE user SET api_token = NULL, verify_token = NULL WHERE id = ?',
+            (user_id,)
+        )
+
+        self.__db.commit()
+
     def create_user(self, name, public_key):
         new_id = self.get_total_users() + 1
 
@@ -82,13 +100,3 @@ class UserModel:
         self.__db.commit()
 
         return new_id
-    
-    def get_user_public_key(self, user_id):
-        db_exec = self.__db.execute(
-            'SELECT public_key FROM user WHERE id = ?',
-            (user_id,)
-        )
-
-        row = db_exec.fetchone()
-
-        return row[0]

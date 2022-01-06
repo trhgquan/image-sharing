@@ -16,7 +16,7 @@ class Register(Resource):
             print(e)
             return {
                 'error' : True,
-                'messages' : str(e)
+                'message' : str(e)
             }, 400
         else: 
             return {
