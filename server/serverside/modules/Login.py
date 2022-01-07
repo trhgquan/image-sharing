@@ -12,7 +12,7 @@ class Login(Resource):
             user_id = Utils.get_input('user_id')
 
             if not self.__UA.loginable(user_id):
-                raise Exception('Invalid user_id')
+                raise Exception('Invalid credentials, please check again')
 
         except Exception as e:
             print(e)
@@ -25,9 +25,13 @@ class Login(Resource):
 
         self.__UA.login_pending(user_id, verify_token)
 
+        # Remember to encrypt verify token with public key
+        public_key, key_length = self.__UA.get_user_public_key(user_id)
+
         return {
             'error' : False,
             'verify_token' : verify_token,
+            'key_length' : key_length
         }, 200
 
     def post(self):
