@@ -144,6 +144,8 @@ class AuthenticationUI:
     @staticmethod
     def Register_UI():
         Utils.clrscr()
+
+        print('Now we\'ll try to create a new account for you!')
         try:
             name = input('Your name: ')
 
@@ -174,9 +176,11 @@ class AuthenticationUI:
         global api_token
         global private_key
 
+        print('Log in with your ID and private_key!')
+
         try:
             user_id_ = input('Your ID: ')
-            private_key_ = getpass('Your password: ')
+            private_key_ = getpass('Your private_key: ')
 
             api_token_, user_name_ = Authentication().login(user_id_, private_key_)
 
@@ -211,7 +215,7 @@ class AuthenticationUI:
             ans = int(input('What\'s your choice then? '))
             if ans == 1:
                 Authentication().logout(user_id, api_token)
-            elif ans == 2:
+            else:
                 return False
 
         except Exception as e:
