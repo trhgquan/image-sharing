@@ -28,6 +28,16 @@ class UserModel:
 
         return row[0]
 
+    def get_user_name(self, user_id):
+        db_exec = self.__db.execute(
+            'SELECT name FROM user WHERE id = ?',
+            (user_id,)
+        )
+
+        row = db_exec.fetchone()
+
+        return row[0]
+
     def check_user_exist(self, user_id):
         db_exec = self.__db.execute(
             'SELECT COUNT(*) FROM user WHERE (id = ?)',
