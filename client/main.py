@@ -9,7 +9,7 @@ def main():
         else:
             # This should be placed inside a class named MainUI?
             Utils.clrscr()
-            print('Hello {0}'.format(auth.user_id))
+            print('Hello {0}'.format(auth.user_name))
             print('Your current choice is: ')
             print('1. Log out')
 

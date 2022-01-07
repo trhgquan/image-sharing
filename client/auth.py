@@ -7,7 +7,7 @@ import random
 
 logged_in = False
 api_token, private_key = None, None
-user_id = None
+user_id, user_name = None, None
 
 class Authentication:
     def __init__(self, ip = '127.0.0.1', port = '5000'):
@@ -86,7 +86,7 @@ class Authentication:
                 # raise Exception(confirm_res["message"])
                 raise Exception('Wrong credentials')
             else:
-                return confirm_res["api_token"]
+                return confirm_res["api_token"], confirm_res["name"]
     
     def logout(self, user_id, api_token):
         '''Log user out.
@@ -170,6 +170,7 @@ class AuthenticationUI:
 
         global logged_in
         global user_id
+        global user_name
         global api_token
         global private_key
 
@@ -177,7 +178,7 @@ class AuthenticationUI:
             user_id_ = input('Your ID: ')
             private_key_ = getpass('Your password: ')
 
-            api_token_ = Authentication().login(user_id_, private_key_)
+            api_token_, user_name_ = Authentication().login(user_id_, private_key_)
 
         except Exception as e:
             print('Error: ' + str(e))
@@ -186,7 +187,7 @@ class AuthenticationUI:
         else:
             api_token = api_token_
             private_key = private_key_
-            user_id = user_id_
+            user_id, user_name = user_id_, user_name_
             logged_in = True
 
             print('Logged in success.')
