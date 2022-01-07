@@ -31,10 +31,11 @@ class Sharing(Resource):
                 raise Exception('Guess not found')
             
             else:
-                public_key = self.__UA.get_user_public_key(guess_id)
+                public_key, key_length = self.__UA.get_user_public_key(guess_id)
                 return {
                     'error' : False,
-                    'public_key' : public_key
+                    'public_key' : public_key,
+                    'key_length' : key_length
                 }, 200
 
         except Exception as e:

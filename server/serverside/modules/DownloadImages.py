@@ -61,10 +61,12 @@ class DownloadImages(Resource):
             
             else:
                 passphrase = self.__im.get_img_passphrase(user_id, img_id)
+                _, key_length = self.__UA.get_user_public_key(user_id)
 
                 return {
                     'error' : False,
-                    'passphrase' : passphrase
+                    'passphrase' : passphrase,
+                    'key_length' : key_length
                 }, 200
 
         except Exception as e:

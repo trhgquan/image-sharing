@@ -20,13 +20,13 @@ class UserModel:
     
     def get_user_public_key(self, user_id):
         db_exec = self.__db.execute(
-            'SELECT public_key FROM user WHERE id = ?',
+            'SELECT public_key, key_length FROM user WHERE id = ?',
             (user_id,)
         )
 
         row = db_exec.fetchone()
 
-        return row[0]
+        return row[0], row[1]
 
     def get_user_name(self, user_id):
         db_exec = self.__db.execute(
@@ -68,6 +68,16 @@ class UserModel:
         
         return row != None and verify_token == row[0]
 
+    def check_public_key_exist(self, public_key, key_length):
+        db_exec = self.__db.execute(
+            'SELECT COUNT(*) FROM user WHERE public_key = ? AND key_length = ?',
+            (public_key, key_length)
+        )
+
+        row = db_exec.fetchone()
+
+        return row[0] > 0
+
     def loginable(self, user_id):
         return self.check_user_exist(user_id)
 
@@ -99,12 +109,12 @@ class UserModel:
 
         self.__db.commit()
 
-    def create_user(self, name, public_key):
+    def create_user(self, name, public_key, key_length):
         new_id = self.get_total_users() + 1
 
         self.__db.execute(
-            'INSERT INTO user (id, name, public_key) VALUES (?, ?, ?)',
-            (new_id, name, public_key)
+            'INSERT INTO user (id, name, public_key, key_length) VALUES (?, ?, ?, ?)',
+            (new_id, name, public_key, key_length)
         )
 
         self.__db.commit()
