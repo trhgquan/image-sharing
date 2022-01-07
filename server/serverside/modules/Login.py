@@ -46,9 +46,11 @@ class Login(Resource):
             }, 400
 
         api_token = self.__UA.login_accepted(user_id)
+        user_name = self.__UA.get_user_name(user_id)
 
         return {
             'error' : False,
             'api_token' : api_token,
+            'name' : user_name,
             'message' : 'login success'
         }, 200
