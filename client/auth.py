@@ -1,5 +1,6 @@
 from getpass import getpass
 from utils import Utils
+from crypt import RSA, PrimeGen
 
 import requests
 import json
@@ -16,12 +17,13 @@ class Authentication:
         self.__port = port
         self.__default_url = 'http://{0}:{1}'.format(self.__ip, self.__port)
     
-    def register(self, name, public_key):
+    def register(self, name, public_key, key_length):
         '''Register a new user.
 
         Input:
             - name: user name,
             - public_key: user public_key (generated)
+            - key_length: user key length (n)
 
         Output:
             - user id
@@ -31,13 +33,11 @@ class Authentication:
         '''
         url = self.__default_url + '/register'
 
-        res = requests.post(
-            url.format(self.__ip, self.__port, name, public_key), 
-            params = {
-                'name' : name,
-                'public_key' : public_key
-            }
-        )
+        res = requests.post(url, params = {
+            'name' : name,
+            'public_key' : public_key,
+            'key_length' : key_length
+        })
 
         res = json.loads(res.text)
 
@@ -71,10 +71,9 @@ class Authentication:
             raise Exception(fire_res["message"])
         else:
             verify_token = fire_res["verify_token"]
+            key_length = fire_res["key_length"]
 
-            # print('Verify token: {0}'.format(verify_token))
-
-            # verify_token = RSA.decrypt(verify_token, private_key)
+            verify_token = RSA.decrypt(verify_token, private_key, key_length)
 
             confirm_res = requests.post(url, params = {
                 'user_id' : user_id,
@@ -144,6 +143,7 @@ class AuthenticationUI:
 
     @staticmethod
     def Register_UI():
+        pg = PrimeGen()        
         Utils.clrscr()
 
         print('Now we\'ll try to create a new account for you!')
@@ -153,16 +153,17 @@ class AuthenticationUI:
             print('Choose your public & private pair:')
 
             while 1:
-                public_key = random.randrange(1000, 9999)
-                private_key = random.randrange(1000, 9999)
+                p, q = pg.primeGen(16), pg.primeGen(16)
 
-                print('Pokemon chosen: ({0}, {1}), n = ,,'.format(public_key, private_key))
+                key_length, public_key, private_key = RSA.generate(p, q)
+
+                print('Key pair: ({0}, {1}), n = {2}'.format(public_key, private_key, key_length))
                 ans = input('Accept (y) or generate a new pair (n):')
 
                 if ans == 'y':
                     break
 
-            user_id = Authentication(ip, port).register(name, public_key)
+            user_id = Authentication(ip, port).register(name, public_key, key_length)
 
         except Exception as e:
             print('Error: ' + str(e))
@@ -195,7 +196,7 @@ class AuthenticationUI:
             api_token_, user_name_ = Authentication(ip, port).login(user_id_, private_key_)
 
         except Exception as e:
-            print('Error: ' + str(e))
+            print('Error: Please check your credentials again')
             Utils.pause()
 
         else:

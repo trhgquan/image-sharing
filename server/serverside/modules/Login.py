@@ -2,6 +2,7 @@ from flask_restful import Resource
 
 from .Models.User import UserModel
 from .Utils import Utils
+from .crypt import RSA
 
 class Login(Resource):
     def __init__(self):
@@ -27,6 +28,7 @@ class Login(Resource):
 
         # Remember to encrypt verify token with public key
         public_key, key_length = self.__UA.get_user_public_key(user_id)
+        verify_token = RSA.encrypt(verify_token, public_key, key_length)
 
         return {
             'error' : False,
