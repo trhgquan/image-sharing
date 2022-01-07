@@ -5,6 +5,7 @@ import requests
 import json
 import random
 
+ip, port = None, None
 logged_in = False
 api_token, private_key = None, None
 user_id, user_name = None, None
@@ -149,10 +150,19 @@ class AuthenticationUI:
         try:
             name = input('Your name: ')
 
-            public_key = random.randrange(1000, 9999)
-            private_key = random.randrange(1000, 9999)
+            print('Choose your public & private pair:')
 
-            user_id = Authentication().register(name, public_key)
+            while 1:
+                public_key = random.randrange(1000, 9999)
+                private_key = random.randrange(1000, 9999)
+
+                print('Pokemon chosen: ({0}, {1}), n = ,,'.format(public_key, private_key))
+                ans = input('Accept (y) or generate a new pair (n):')
+
+                if ans == 'y':
+                    break
+
+            user_id = Authentication(ip, port).register(name, public_key)
 
         except Exception as e:
             print('Error: ' + str(e))
@@ -182,7 +192,7 @@ class AuthenticationUI:
             user_id_ = input('Your ID: ')
             private_key_ = getpass('Your private_key: ')
 
-            api_token_, user_name_ = Authentication().login(user_id_, private_key_)
+            api_token_, user_name_ = Authentication(ip, port).login(user_id_, private_key_)
 
         except Exception as e:
             print('Error: ' + str(e))
@@ -214,7 +224,7 @@ class AuthenticationUI:
 
             ans = int(input('What\'s your choice then? '))
             if ans == 1:
-                Authentication().logout(user_id, api_token)
+                Authentication(ip, port).logout(user_id, api_token)
             else:
                 return False
 

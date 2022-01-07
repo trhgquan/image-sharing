@@ -2,7 +2,10 @@ from auth import AuthenticationUI
 from utils import Utils
 import auth
 
-def main():
+def main(): 
+    auth.ip = input('Server ip: ')
+    auth.port = input('Port: ')
+
     while 1:
         if not auth.logged_in:
             AuthenticationUI.Menu_UI()
