@@ -11,7 +11,7 @@ class UploadImages(Resource):
     def __init__(self):
         self.__UA = UserModel()
         self.__im = ImageModel()
-        self.ALLOWED_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.bmp', '.gif']
+        self.ALLOWED_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.bmp']
 
     def get_image(self):
         try:
@@ -34,6 +34,7 @@ class UploadImages(Resource):
             api_token = Utils.get_input('api_token')
             passphrase = Utils.get_input('passphrase')
 
+            real_name = Utils.get_input('real_name')
             image = self.get_image()
            
             if not self.__UA.check_api_token(user_id, api_token):
@@ -43,7 +44,8 @@ class UploadImages(Resource):
                 new_path, new_img_id = self.__im.save_img_dir(image)
                 self.__im.save_img_record(
                     user_id, new_img_id,
-                    passphrase, new_path)
+                    passphrase, new_path, real_name
+                )
 
         except Exception as e:
             print(e)
@@ -54,7 +56,7 @@ class UploadImages(Resource):
         else:
             return {
                 'error' : False,
-                'image_filename' : new_path,
+                'image_filename' : real_name,
                 'image_id' : new_img_id,
                 'message' : 'upload successful'
             }, 200

@@ -61,11 +61,13 @@ class DownloadImages(Resource):
             
             else:
                 passphrase = self.__im.get_img_passphrase(user_id, img_id)
+                _, real_name = self.__im.get_img_filename(user_id, img_id)
                 _, key_length = self.__UA.get_user_public_key(user_id)
 
                 return {
                     'error' : False,
                     'passphrase' : passphrase,
+                    'real_name' : real_name,
                     'key_length' : key_length
                 }, 200
 
@@ -89,7 +91,7 @@ class DownloadImages(Resource):
                 raise Exception('Image not found')
 
             else:
-                filename = self.__im.get_img_filename(user_id, img_id)
+                filename, _ = self.__im.get_img_filename(user_id, img_id)
 
                 return send_from_directory(
                     directory = os.path.join(
