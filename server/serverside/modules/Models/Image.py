@@ -29,11 +29,11 @@ class ImageModel:
 
         return new_name, new_img_id
 
-    def save_img_record(self, user_id, img_id, passphrase, location):
+    def save_img_record(self, user_id, img_id, passphrase, location, real_name):
         # Add records to image database
         self.__db.execute(
-            'INSERT INTO images (id, author_id, location) VALUES (?, ?, ?)',
-            (img_id, user_id, location)
+            'INSERT INTO images (id, author_id, location, real_name) VALUES (?, ?, ?, ?)',
+            (img_id, user_id, location, real_name)
         )
 
         self.__db.commit()
@@ -57,7 +57,7 @@ class ImageModel:
     
     def get_images_of_user(self, user_id):
         db_exec = self.__db.execute(
-            'SELECT images.id, images.location FROM images, sharing WHERE images.id = sharing.image_id AND sharing.user_id = ?',
+            'SELECT images.id, images.real_name FROM images, sharing WHERE images.id = sharing.image_id AND sharing.user_id = ?',
             (user_id,)
         )
 
@@ -87,13 +87,13 @@ class ImageModel:
     
     def get_img_filename(self, user_id, img_id):
         db_exec = self.__db.execute(
-            'SELECT images.location FROM images, sharing WHERE sharing.user_id = ? AND sharing.image_id = ? AND sharing.image_id = images.id',
+            'SELECT images.location, images.real_name FROM images, sharing WHERE sharing.user_id = ? AND sharing.image_id = ? AND sharing.image_id = images.id',
             (user_id, img_id)
         )
 
         row = db_exec.fetchone()
 
-        return row[0]
+        return row[0], row[1]
     
     def is_author(self, user_id, img_id):
         db_exec = self.__db.execute(

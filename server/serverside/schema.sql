@@ -15,6 +15,7 @@ CREATE TABLE images (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   author_id INTEGER NOT NULL,
   location TEXT NOT NULL,
+  real_name TEXT NOT NULL,
   FOREIGN KEY (author_id) REFERENCES user (id)
 );
 
