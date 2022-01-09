@@ -61,11 +61,12 @@ class AES():
         decrypted_img_np = np.frombuffer(decrypted_img_bytes, np.uint8).reshape(encrypted_img.shape) 
 
         # Get the stored padding value   
-        padding = int(decrypted_img_np[-1, -1, 0])  
+        # padding = int(decrypted_img_np[-1, -1, 0])  
 
-        decrypted_img = decrypted_img_np[0:-padding, :, :].copy() 
+        # decrypted_img = decrypted_img_np[0:-padding, :, :].copy()
         
-        cv2.imwrite(old_filename, decrypted_img)
+        # cv2.imwrite(old_filename, decrypted_img)
+        cv2.imwrite(old_filename, decrypted_img_np)
         
 
 class BigMod:
