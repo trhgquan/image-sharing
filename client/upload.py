@@ -1,7 +1,7 @@
 from utils import Utils
 from crypt import RSA, AES
 
-import auth, requests, json
+import auth, requests, json, os
 
 class UploadImage:
     def __init__(self, ip = '127.0.0.1', port = '5000'):
@@ -35,16 +35,20 @@ class UploadImage:
 
         key = RSA.encrypt(key, public_key, key_length)
 
-        files = [('image', (encrypted_file, open(encrypted_file, 'rb'), 'image/png'))]
+        with open(encrypted_file, 'rb') as f:
+            files = [('image', (encrypted_file, f, 'image/png'))]
 
-        response = requests.post(url, params = {
-            'user_id' : auth.user_id,
-            'api_token' : auth.api_token,
-            'passphrase' : key,
-            'real_name' : real_name
-        }, files = files)
+            response = requests.post(url, params = {
+                'user_id' : auth.user_id,
+                'api_token' : auth.api_token,
+                'passphrase' : key,
+                'real_name' : real_name
+            }, files = files)
 
         response = json.loads(response.text)
+
+        # Delete temp images after finished
+        os.remove(encrypted_file)
 
         if response["error"]:
             raise Exception(response["message"])
