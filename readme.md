@@ -4,7 +4,7 @@
 |   SID   |       Name          |     GitHub     |   
 |---------|---------------------|----------------|
 |19120064 |Nguyen Ho Hoang Duy  |[nhhduy](https://github.com/nhhduy)|
-|19120179 |Vo Trung Trung Chanh |[vttchanh](https://github.com/vttchanh)|
+|19120179 |Vo Truong Trung Chanh |[vttchanh](https://github.com/vttchanh)|
 |19120266 |Nguyen Hoang Anh Kiet|[NHAK2302](https://github.com/nhak2302)
 |19120338 |Tran Hoang Quan|[trhgquan](https://github.com/trhgquan)
 
