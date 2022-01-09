@@ -7,9 +7,10 @@ from Crypto.Cipher import AES as cc
 from modules.utils import Utils
 
 class AES():
-    def __init__(self, key_length = 8):
-        self.__key = self.generate(key_length)
-        self.__iv = b'0000000000000000'
+    def __init__(self, key_length = 16):
+        self.__key_length = key_length
+        self.__key = self.generate(key_length // 2)
+        self.__iv = b'0' * key_length
 
     @staticmethod
     def generate(length):
@@ -20,24 +21,28 @@ class AES():
 
         img = cv2.imread(encrypted_image)
 
-        if img.size % 16 > 0:
+        if img.size % self.__key_length > 0:
             row = img.shape[0]
 
             # Number of rows to pad (4 rows)
-            pad = 16 - (row % 16)
+            pad = self.__key_length - (row % self.__key_length)
 
-            # Pad rows at the bottom  - new shape is (304, 451, 3) - 411312 bytes.
+            # Pad rows at the bottom
             img = np.pad(img, ((0, pad), (0, 0), (0, 0)))
 
             # Store the pad value in the last element4
             img[-1, -1, 0] = pad
+
+        else:
+            img = np.pad(img, ((0, self.__key_length), (0, 0), (0, 0)))
+            img[-1, -1, 0] = self.__key_length
 
         img_bytes = img.tobytes()
 
         # Encrypt the array of bytes.
         encrypted_img_bytes = cc.new(self.__key.encode(), cc.MODE_CBC, self.__iv).encrypt(img_bytes) 
 
-        # Convert the encrypted buffer to NumPy array and reshape to the shape of the padded image (304, 451, 3)
+        # Convert the encrypted buffer to NumPy array and reshape to the shape of the padded image
         encrypted_img_np = np.frombuffer(encrypted_img_bytes, np.uint8).reshape(img.shape)
 
         # Save the image - Save in PNG format because PNG is lossless (JPEG format is not going to work).
@@ -61,12 +66,11 @@ class AES():
         decrypted_img_np = np.frombuffer(decrypted_img_bytes, np.uint8).reshape(encrypted_img.shape) 
 
         # Get the stored padding value   
-        # padding = int(decrypted_img_np[-1, -1, 0])  
+        padding = int(decrypted_img_np[-1, -1, 0])
 
-        # decrypted_img = decrypted_img_np[0:-padding, :, :].copy()
+        decrypted_img = decrypted_img_np[0:-padding, :, :].copy()
         
-        # cv2.imwrite(old_filename, decrypted_img)
-        cv2.imwrite(old_filename, decrypted_img_np)
+        cv2.imwrite(old_filename, decrypted_img)
         
 
 class BigMod:
