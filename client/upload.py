@@ -35,7 +35,7 @@ class UploadImage:
 
         key = RSA.encrypt(key, public_key, key_length)
 
-        files=[('image', (encrypted_file, open(encrypted_file, 'rb'), 'image/png'))]
+        files = [('image', (encrypted_file, open(encrypted_file, 'rb'), 'image/png'))]
 
         response = requests.post(url, params = {
             'user_id' : auth.user_id,

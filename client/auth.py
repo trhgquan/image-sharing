@@ -2,9 +2,7 @@ from getpass import getpass
 from utils import Utils
 from crypt import RSA, PrimeGen
 
-import requests
-import json
-import random
+import requests, json
 
 ip, port = None, None
 logged_in = False
@@ -83,7 +81,6 @@ class Authentication:
             confirm_res = json.loads(confirm_res.text)
 
             if confirm_res["error"]:
-                # raise Exception(confirm_res["message"])
                 raise Exception('Wrong credentials')
             else:
                 return confirm_res["api_token"], confirm_res["name"]
@@ -158,7 +155,7 @@ class AuthenticationUI:
                 key_length, public_key, private_key = RSA.generate(p, q)
 
                 print('Key pair: ({0}, {1}), n = {2}'.format(public_key, private_key, key_length))
-                ans = input('Accept (y) or generate a new pair (n):')
+                ans = input('Accept (y) or generate a new pair (n): ')
 
                 if ans == 'y':
                     break
