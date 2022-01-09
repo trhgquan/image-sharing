@@ -29,11 +29,9 @@ class UploadImage:
     def upload_image(self, image_path):
         url = self.__default_url + '/upload'
         
-        encrypted_file, real_name, key = self.__aes.encrypt(image_path)
-
-        print(encrypted_file, real_name, key)
-
         public_key, key_length = self.get_public_key()
+
+        encrypted_file, real_name, key = self.__aes.encrypt(image_path)
 
         key = RSA.encrypt(key, public_key, key_length)
 
