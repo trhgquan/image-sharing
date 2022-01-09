@@ -1,9 +1,10 @@
 from auth import AuthenticationUI
+from upload import UploadUI
 from utils import Utils
 import auth
 
 def main(): 
-    auth.ip = input('Server ip: ')
+    auth.ip = input('Server IP: ')
     auth.port = input('Port: ')
 
     while 1:
@@ -15,12 +16,15 @@ def main():
             print('Hello {0}'.format(auth.user_name))
             print('Your current choice is: ')
             print('1. Log out')
+            print('2. Upload a new image to server')
 
             try:
                 ans = int(input('Your choice: '))
 
                 if ans == 1:
                     AuthenticationUI.Logout_UI()
+                elif ans == 2:
+                    UploadUI.main()
                 else:
                     raise Exception('Invalid choice')
             except Exception as e:

@@ -1,4 +1,72 @@
 import random
+import secrets
+import cv2
+import numpy as np
+
+from Crypto.Cipher import AES as cc
+from utils import Utils
+
+class AES():
+    def __init__(self, key_length = 8):
+        self.__key = self.generate(key_length)
+        self.__iv = b'0000000000000000'
+
+    @staticmethod
+    def generate(length):
+        return secrets.token_hex(length)
+    
+    def encrypt(self, filename):
+        encrypted_image, real_name = Utils.convert_to_encryptable(filename)
+
+        img = cv2.imread(encrypted_image)
+
+        if img.size % 16 > 0:
+            row = img.shape[0]
+
+            # Number of rows to pad (4 rows)
+            pad = 16 - (row % 16)
+
+            # Pad rows at the bottom  - new shape is (304, 451, 3) - 411312 bytes.
+            img = np.pad(img, ((0, pad), (0, 0), (0, 0)))
+
+            # Store the pad value in the last element4
+            img[-1, -1, 0] = pad
+
+        img_bytes = img.tobytes()
+
+        # Encrypt the array of bytes.
+        encrypted_img_bytes = cc.new(self.__key.encode(), cc.MODE_CBC, self.__iv).encrypt(img_bytes) 
+
+        # Convert the encrypted buffer to NumPy array and reshape to the shape of the padded image (304, 451, 3)
+        encrypted_img_np = np.frombuffer(encrypted_img_bytes, np.uint8).reshape(img.shape)
+
+        # Save the image - Save in PNG format because PNG is lossless (JPEG format is not going to work).
+        cv2.imwrite(encrypted_image, encrypted_img_np)
+
+        return encrypted_image, real_name, self.__key
+
+    def decrypt(self, filename, old_filename, key):
+        '''Decrypt filename with key, return old_filename
+
+        Input:
+            - filename : encrypted file.
+            - old_filename : name of file after decrypt.
+            - key : encryption key (AES)
+        '''
+        encrypted_img = cv2.imread(filename)
+
+        decrypted_img_bytes = cc.new(key.encode(), cc.MODE_CBC, self.__iv).decrypt(encrypted_img.tobytes())
+
+        # The shape of the encrypted and decrypted image is the same (304, 451, 3)
+        decrypted_img_np = np.frombuffer(decrypted_img_bytes, np.uint8).reshape(encrypted_img.shape) 
+
+        # Get the stored padding value   
+        padding = int(decrypted_img_np[-1, -1, 0])  
+
+        decrypted_img = decrypted_img_np[0:-padding, :, :].copy() 
+        
+        cv2.imwrite(old_filename, decrypted_img)
+        
 
 class BigMod:
     @staticmethod
@@ -40,7 +108,6 @@ class BigMod:
 
         return y
 
-
 class XEuclidean:
     @staticmethod
     def extended_gcd(a, b):
@@ -57,7 +124,6 @@ class XEuclidean:
         if g != 1:
             raise Exception('Inverse modular does not exist.')
         return x % m
-
 
 class RSA:
     @staticmethod

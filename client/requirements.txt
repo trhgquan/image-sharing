@@ -1,1 +1,5 @@
-requests==2.27.1
+numpy==1.21.2
+opencv_python==4.5.4.58
+Pillow==9.0.0
+pycryptodome==3.12.0
+requests==2.26.0

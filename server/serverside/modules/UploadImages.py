@@ -33,8 +33,8 @@ class UploadImages(Resource):
             user_id = Utils.get_input('user_id')
             api_token = Utils.get_input('api_token')
             passphrase = Utils.get_input('passphrase')
-
             real_name = Utils.get_input('real_name')
+
             image = self.get_image()
            
             if not self.__UA.check_api_token(user_id, api_token):
