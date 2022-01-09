@@ -1,6 +1,6 @@
 from getpass import getpass
-from utils import Utils
-from crypt import RSA, PrimeGen
+from modules.utils import Utils
+from modules.crypt import RSA, PrimeGen
 
 import requests, json
 

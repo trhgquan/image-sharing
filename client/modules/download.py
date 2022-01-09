@@ -1,8 +1,9 @@
-from getlist import GetImageList
-from crypt import RSA, AES
-from utils import Utils
+from modules.getlist import GetImageList
+from modules.crypt import RSA, AES
+from modules.utils import Utils
 
-import requests, auth, os, shutil
+import requests, os, shutil
+import modules.auth as auth
 
 class Download:
     def __init__(self, ip = '127.0.0.1', port = '5000'):
@@ -43,12 +44,12 @@ class Download:
             aesKey = RSA().decrypt(passphrase,auth.private_key,key_length)
 
             if res.status_code == 200:
-                with open('{0}/{1}'.format(save_dir, filename), 'wb') as f:
+                with open('{0}/{1}_{2}'.format(save_dir, img_id, filename), 'wb') as f:
                     res.raw.decode_content = True
 
                     shutil.copyfileobj(res.raw, f)
 
-                    encryptedImage = '{0}/{1}'.format(save_dir, filename)
+                    encryptedImage = '{0}/{1}_{2}'.format(save_dir, img_id, filename)
 
                     AES().decrypt(encryptedImage, encryptedImage, aesKey)
 

@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 
 from Crypto.Cipher import AES as cc
-from utils import Utils
+from modules.utils import Utils
 
 class AES():
     def __init__(self, key_length = 8):

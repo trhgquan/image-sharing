@@ -1,6 +1,7 @@
-from utils import Utils
+from modules.utils import Utils
 
-import requests, auth
+import requests
+import modules.auth as auth
 
 class GetImageList:
     def __init__(self, ip = '127.0.0.1', port = '5000'):

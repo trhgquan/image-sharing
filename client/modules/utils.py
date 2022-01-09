@@ -1,5 +1,4 @@
 from PIL import Image
-from pathlib import Path
 
 import os
 
@@ -37,17 +36,3 @@ class Utils:
             img.save(new_filename)
 
         return new_filename, os.path.basename(img_path)
-    
-    @staticmethod
-    def convert_to_old_extension(img_path, old_filename):
-        '''Convert any image to it's old name
-
-        Input:
-            - img_path : path to the image
-            - old_filename : old filename (with old extension)
-        
-        Output:
-            - New image saved.
-        '''
-        with Image.open(img_path) as img:
-            img.save(old_filename)

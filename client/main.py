@@ -1,11 +1,12 @@
-from auth import AuthenticationUI
-from upload import UploadUI
-from getlist import GetImageListUI
-from download import DownloadUI
-from share import ShareImageUI
-from utils import Utils
+from modules.auth import AuthenticationUI
+from modules.upload import UploadUI
+from modules.getlist import GetImageListUI
+from modules.download import DownloadUI
+from modules.share import ShareImageUI
+from modules.utils import Utils
 
-import auth, requests, json
+import modules.auth as auth
+import requests, json
 
 def try_connect(ip, port):
     '''Try connecting to the server.

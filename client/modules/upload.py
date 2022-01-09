@@ -1,7 +1,8 @@
-from utils import Utils
-from crypt import RSA, AES
+from modules.utils import Utils
+from modules.crypt import RSA, AES
 
-import auth, requests, json, os
+import modules.auth as auth
+import requests, json, os
 
 class UploadImage:
     def __init__(self, ip = '127.0.0.1', port = '5000'):
