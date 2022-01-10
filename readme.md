@@ -9,8 +9,8 @@
 |19120338 |Tran Hoang Quan|[trhgquan](https://github.com/trhgquan)
 
 ## Installation
-Client installation, please visit [client/readme.md](client\readme.md)
+Client installation, please visit [client/readme.md](client/readme.md)
 
-Server installation, please visit [server/readme.md](server\readme.md)
+Server installation, please visit [server/readme.md](server/readme.md)
 
 VNUHCM - University of Science, Spring 2022.
