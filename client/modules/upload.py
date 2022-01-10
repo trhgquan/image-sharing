@@ -16,7 +16,7 @@ class UploadImage:
 
         response = requests.post(url, params = {
             'author_id' : auth.user_id,
-            'guess_id' : auth.user_id,
+            'guest_id' : auth.user_id,
             'api_token' : auth.api_token
         })
 

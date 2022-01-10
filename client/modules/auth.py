@@ -118,9 +118,9 @@ class AuthenticationUI:
         Utils.clrscr()
         print('Hi, welcome aboard! It seems like you\'re not logged in!')
         print('Now you can:')
-        print('1. Log in')
-        print('2. Create a new account')
-        print('3. Exit')
+        print('\t1. Log in')
+        print('\t2. Create a new account')
+        print('\t3. Exit')
 
         try:
             ans = int(input('What\'s your choice then? '))
@@ -168,10 +168,22 @@ class AuthenticationUI:
 
         else:
             print('Register success, your new id is: {0}'.format(user_id))
-            print('Remember your credentials:')
-            print('ID: {0}'.format(user_id))
-            print('Public_key: {0}'.format(public_key))
-            print('Private_key: {0}'.format(private_key))
+            print('\nDo you want to export credentials to {0}/txt? (y/n) '.format(user_id))
+            
+            ans = input()
+
+            if ans == 'y':
+                with open('{0}.txt'.format(user_id), 'w+') as f:
+                    print('ID: {0}'.format(user_id), file = f)
+                    print('Public_key: {0}'.format(public_key), file = f)
+                    print('Private_key: {0}'.format(private_key), file = f)
+                print('Successfully exported to {0}.txt'.format(user_id))
+            else:
+                print('Remember your credentials:')
+                print('ID: {0}'.format(user_id))
+                print('Public_key: {0}'.format(public_key))
+                print('Private_key: {0}'.format(private_key))
+
             Utils.pause()
 
     @staticmethod
@@ -217,8 +229,8 @@ class AuthenticationUI:
     
         try:
             print('Are you sure you want to log out?')
-            print('1. Yes')
-            print('2. No')
+            print('\t1. Yes')
+            print('\t2. No')
 
             ans = int(input('What\'s your choice then? '))
             if ans == 1:
