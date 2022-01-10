@@ -17,6 +17,8 @@ class DownloadImages(Resource):
             return self.user_images()
         if request.endpoint == 'passphrase':
             return self.image_passphrase()
+        if request.endpoint == 'checksum':
+            return self.image_checksum()
         if request.endpoint == 'download':
             return self.download_image()
         return None, 204
@@ -77,6 +79,35 @@ class DownloadImages(Resource):
                 'error' : True,
                 'message' : str(e)
             }, 400
+    
+    def image_checksum(self):
+        try:
+            user_id = Utils.get_input('user_id')
+            api_token = Utils.get_input('api_token')
+            img_id = Utils.get_input('img_id')
+
+            if not self.__UA.check_api_token(user_id, api_token):
+                raise Exception('Permission denied: either user_id or api_token is wrong')
+
+            elif not self.__im.check_img_exist(user_id, img_id):
+                raise Exception('Image not found')
+
+            else:
+                author_id, checksum = self.__im.get_img_checksum(img_id)
+                author_public_key, key_length = self.__UA.get_user_public_key(author_id)
+
+                return {
+                    'error' : False,
+                    'checksum' : checksum,
+                    'author_public_key' : author_public_key,
+                    'author_key_length' : key_length
+                }
+        except Exception as e:
+            print(e)
+            return {
+                'error' : True,
+                'message' : str(e)
+            }, 400 
 
     def download_image(self):
         try:

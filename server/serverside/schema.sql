@@ -16,6 +16,7 @@ CREATE TABLE images (
   author_id INTEGER NOT NULL,
   location TEXT NOT NULL,
   real_name TEXT NOT NULL,
+  checksum TEXT NOT NULL,
   FOREIGN KEY (author_id) REFERENCES user (id)
 );
 

@@ -32,9 +32,10 @@ class UploadImage:
         
         public_key, key_length = self.get_public_key()
 
-        encrypted_file, real_name, key = self.__aes.encrypt(image_path)
+        encrypted_file, real_name, key, original_checksum = self.__aes.encrypt(image_path)
 
         key = RSA.encrypt(key, public_key, key_length)
+        checksum = RSA.encrypt(original_checksum, public_key, key_length)
 
         with open(encrypted_file, 'rb') as f:
             files = [('image', (encrypted_file, f, 'image/png'))]
@@ -43,7 +44,8 @@ class UploadImage:
                 'user_id' : auth.user_id,
                 'api_token' : auth.api_token,
                 'passphrase' : key,
-                'real_name' : real_name
+                'real_name' : real_name,
+                'checksum' : checksum
             }, files = files)
 
         response = json.loads(response.text)

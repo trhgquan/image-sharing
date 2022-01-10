@@ -34,6 +34,7 @@ class UploadImages(Resource):
             api_token = Utils.get_input('api_token')
             passphrase = Utils.get_input('passphrase')
             real_name = Utils.get_input('real_name')
+            checksum = Utils.get_input('checksum')
 
             image = self.get_image()
            
@@ -44,7 +45,8 @@ class UploadImages(Resource):
                 new_path, new_img_id = self.__im.save_img_dir(image)
                 self.__im.save_img_record(
                     user_id, new_img_id,
-                    passphrase, new_path, real_name
+                    passphrase, new_path,
+                    real_name, checksum
                 )
 
         except Exception as e:

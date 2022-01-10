@@ -2,6 +2,7 @@ import random
 import secrets
 import cv2
 import numpy as np
+import hashlib
 
 from Crypto.Cipher import AES as cc
 from modules.utils import Utils
@@ -9,17 +10,31 @@ from modules.utils import Utils
 class AES():
     def __init__(self, key_length = 16):
         self.__key_length = key_length
-        self.__key = self.generate(key_length // 2)
+        self.__key = self.generate(key_length)
         self.__iv = b'0' * key_length
 
     @staticmethod
     def generate(length):
-        return secrets.token_hex(length)
+        # Since token_hex create 2 characters for a byte,
+        return secrets.token_hex(length // 2)
     
     def encrypt(self, filename):
+        '''Encrypt an image, using AES and CBC mode.
+
+        Input:
+            - filename : filename to encrypt.
+
+        Output:
+            - encrypted_image : path to encrypted temporary image
+            - real_name : original name of the image 
+            - self.__key : key created to encrypt this image
+            - original_checksum : original image checksum
+        '''
         encrypted_image, real_name = Utils.convert_to_encryptable(filename)
 
         img = cv2.imread(encrypted_image)
+
+        original_checksum = hashlib.sha256(img.tobytes()).hexdigest()
 
         if img.size % self.__key_length > 0:
             row = img.shape[0]
@@ -48,7 +63,7 @@ class AES():
         # Save the image - Save in PNG format because PNG is lossless (JPEG format is not going to work).
         cv2.imwrite(encrypted_image, encrypted_img_np)
 
-        return encrypted_image, real_name, self.__key
+        return encrypted_image, real_name, self.__key, original_checksum
 
     def decrypt(self, filename, old_filename, key):
         '''Decrypt filename with key, return old_filename
@@ -57,6 +72,9 @@ class AES():
             - filename : encrypted file.
             - old_filename : name of file after decrypt.
             - key : encryption key (AES)
+        
+        Return:
+            - decrypted_checksum : checksum of the decrypted image.
         '''
         encrypted_img = cv2.imread(filename)
 
@@ -69,8 +87,12 @@ class AES():
         padding = int(decrypted_img_np[-1, -1, 0])
 
         decrypted_img = decrypted_img_np[0:-padding, :, :].copy()
+
+        decrypted_checksum = hashlib.sha256(decrypted_img.tobytes()).hexdigest()
         
         cv2.imwrite(old_filename, decrypted_img)
+
+        return decrypted_checksum
         
 
 class BigMod:

@@ -11,13 +11,25 @@ class Download:
         self.__port = port
         self.__default_url = 'http://{0}:{1}'.format(self.__ip, self.__port)
 
-    def getPassphrase(self, api_token, user_id, img_id):
+    def get_passphrase(self, api_token, user_id, img_id):
         url = self.__default_url + '/passphrase'
         res = requests.post(url, params = {
             'api_token' : api_token,
             'user_id' : user_id,
             'img_id': img_id
         })
+        res = res.json()
+        return res
+
+    def get_checksum(self, user_id, img_id, api_token):
+        url = self.__default_url + '/checksum'
+
+        res = requests.post(url, params = {
+            'api_token' : api_token,
+            'user_id' : user_id,
+            'img_id' : img_id
+        })
+
         res = res.json()
         return res
 
@@ -34,14 +46,21 @@ class Download:
         if not os.path.isdir(save_dir):
             os.mkdir(save_dir)
 
-        ppRes = self.getPassphrase(api_token, user_id, img_id) #ppRes: getPassphrase response
+        ppRes = self.get_passphrase(api_token, user_id, img_id) #ppRes: get_passphrase response
+        ckRes = self.get_checksum(user_id, img_id, api_token)   #ckRes: get_checksum response
         
-        if not ppRes['error']:
+        if not ppRes['error'] and not ckRes['error']:
+            # For image decryption
             filename = ppRes['real_name']
             passphrase = ppRes['passphrase']
             key_length = ppRes['key_length']
 
-            aesKey = RSA().decrypt(passphrase,auth.private_key,key_length)
+            # For image checksum
+            original_checksum = ckRes['checksum']
+            author_public_key = ckRes['author_public_key']
+            author_key_length = ckRes['author_key_length']
+
+            aesKey = RSA().decrypt(passphrase, auth.private_key, key_length)
 
             if res.status_code == 200:
                 with open('{0}/{1}_{2}'.format(save_dir, img_id, filename), 'wb') as f:
@@ -51,14 +70,22 @@ class Download:
 
                     encryptedImage = '{0}/{1}_{2}'.format(save_dir, img_id, filename)
 
-                    AES().decrypt(encryptedImage, encryptedImage, aesKey)
+                    checksum = AES().decrypt(encryptedImage, encryptedImage, aesKey)
 
-                    print('Image download success: ', filename)                
+                    encrypted_checksum = RSA().encrypt(checksum, author_public_key, author_key_length)
+
+                if encrypted_checksum == original_checksum:
+                    print('Image {0} downloaded successfully, with correct author checksum'.format(filename))
+                else:
+                    print('Image {0} downloaded successfully, but corrupted due to an unknown reason.'.format(filename))
             else:
                 res = res.json()
                 print(res['message'])
         else:
-            print(ppRes['message'])
+            if ppRes['error']:
+                print(ppRes['message'])
+            if ckRes['error']:
+                print(ckRes['message'])
 
 class DownloadUI:
     @staticmethod

@@ -64,6 +64,12 @@ def create_app(test_config = None):
         methods = ['POST']
     )
     api.add_resource(
+        DownloadImages,
+        '/checksum',
+        endpoint = 'checksum',
+        methods = ['POST']
+    )
+    api.add_resource(
         Sharing,
         '/publickey',
         endpoint = 'publickey',
