@@ -1,5 +1,22 @@
 # Simple Image Sharing, But Secured
 
+## The protocol
+### Upload-download and file checksum:
+
+![upload-download-protocol.png](upload-download-protocol.png)
+
+Note:
+* Image encryption: using AES block cipher encryption with CBC mode.
+
+### Key sharing:
+
+![sharing-protocol.png](sharing-protocol.png)
+
+## Installation
+Client installation, please visit [client/readme.md](client/readme.md)
+
+Server installation, please visit [server/readme.md](server/readme.md)
+
 ## Our team
 |   SID   |       Name          |     GitHub     |   
 |---------|---------------------|----------------|
@@ -8,9 +25,4 @@
 |19120266 |Nguyen Hoang Anh Kiet|[NHAK2302](https://github.com/nhak2302)
 |19120338 |Tran Hoang Quan|[trhgquan](https://github.com/trhgquan)
 
-## Installation
-Client installation, please visit [client/readme.md](client/readme.md)
-
-Server installation, please visit [server/readme.md](server/readme.md)
-
-VNUHCM - University of Science, Spring 2022.
+VNUHCM - University of Science, Dec. 2021 - Jan. 2022.
