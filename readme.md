@@ -1,5 +1,7 @@
 # Simple Image Sharing, But Secured
 
+A project in Introduction to Cryptography - CSC15005
+
 ## The protocol
 ### Upload-download and file checksum:
 
