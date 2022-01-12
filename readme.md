@@ -12,7 +12,7 @@ Note:
 
 ### Key sharing:
 
-![vi-report/img/sharing-protocol.PNG](vi-report/img/sharing-protocol.PNG)
+![vi-report/img/sharing-protocol.png](vi-report/img/sharing-protocol.PNG)
 
 ## Installation
 Client installation, please visit [client/readme.md](client/readme.md)
