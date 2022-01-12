@@ -5,14 +5,14 @@ A project in Introduction to Cryptography - CSC15005
 ## The protocol
 ### Upload-download and file checksum:
 
-![upload-download-protocol.png](upload-download-protocol.PNG)
+![vi-report/img/upload-protocol.PNG](vi-report/img/upload-protocol.PNG)
 
 Note:
 * Image encryption: using AES block cipher encryption with CBC mode.
 
 ### Key sharing:
 
-![sharing-protocol.png](sharing-protocol.PNG)
+![vi-report/img/sharing-protocol.PNG](vi-report/img/sharing-protocol.PNG)
 
 ## Installation
 Client installation, please visit [client/readme.md](client/readme.md)
