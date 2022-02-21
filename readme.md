@@ -27,4 +27,7 @@ Server installation, please visit [server/readme.md](server/readme.md)
 |19120266 |Nguyen Hoang Anh Kiet|[NHAK2302](https://github.com/nhak2302)
 |19120338 |Tran Hoang Quan|[trhgquan](https://github.com/trhgquan)
 
+## LICENSE
+This work is licensed under [The GNU General Public License v3.0](LICENSE)
+
 VNUHCM - University of Science, Dec. 2021 - Jan. 2022.
